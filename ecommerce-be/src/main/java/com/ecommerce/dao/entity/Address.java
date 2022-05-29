@@ -8,22 +8,27 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "address")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class Address {
     @Id
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String email;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customer;
 
-    @Column(nullable = false)
-    private String password;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private AddressType addressType;
+
+    @Column
+    private String addressLine;
 
 }

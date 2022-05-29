@@ -14,18 +14,55 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="password" type="varchar(200)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
-            <column name="shipping_address" type="varchar(200)"/>
-            <column name="billing_address" type="varchar(200)"/>
+        </createTable>
+        <createIndex tableName="customer" indexName="idx_customer_email">
+            <column name="email"/>
+        </createIndex>
+
+        <createTable tableName="address">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="customer_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_type" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_line" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="customer_id"
+                                 baseTableName="address"
+                                 constraintName="fk_address_customer"
+                                 referencedColumnNames="id"
+                                 referencedTableName="customer"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+        />
+        <createTable tableName="credit_card">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="customer_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="credit_card_number" type="varchar(16)"/>
             <column name="credit_card_month" type="tinyint"/>
             <column name="credit_card_year" type="tinyint"/>
             <column name="credit_card_cvv" type="tinyint"/>
         </createTable>
-        <createIndex tableName="customer" indexName="idx_customer_email">
-            <column name="email" />
-        </createIndex>
+        <addForeignKeyConstraint baseColumnNames="customer_id"
+                                 baseTableName="credit_card"
+                                 constraintName="fk_credit_card_customer"
+                                 referencedColumnNames="id"
+                                 referencedTableName="customer"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+        />
 
 
     </changeSet>
