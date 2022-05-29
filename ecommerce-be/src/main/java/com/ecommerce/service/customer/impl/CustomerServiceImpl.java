@@ -23,7 +23,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
     private final CreditCardRepository creditCardRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void createCustomer(CustomerCreateRequest request) {
@@ -57,6 +57,7 @@ public class CustomerServiceImpl implements CustomerService {
                             .creditCardMonth(request.creditCardExpireMonth())
                             .creditCardYear(request.creditCardExpireYear())
                             .creditCardCvv(request.creditCardCvv())
+                            .customer(customer)
                             .build());
         }
     }
