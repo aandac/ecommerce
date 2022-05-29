@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="29.05.2022-17:00" author="ali.andac">
+        <createTable tableName="customer">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="email" type="varchar(200)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(200)">
+                <constraints nullable="false" />
+            </column>
+            <column name="shipping_address" type="varchar(200)"/>
+            <column name="billing_address" type="varchar(200)"/>
+            <column name="credit_card_number" type="varchar(16)"/>
+            <column name="credit_card_month" type="tinyint"/>
+            <column name="credit_card_year" type="tinyint"/>
+            <column name="credit_card_cvv" type="tinyint"/>
+        </createTable>
+        <createIndex tableName="customer" indexName="idx_customer_email">
+            <column name="email" />
+        </createIndex>
+
+
+    </changeSet>
+
+</databaseChangeLog>
