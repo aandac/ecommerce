@@ -2,7 +2,7 @@ package com.ecommerce.dao.repo;
 
 
 import com.ecommerce.dao.entity.CreditCard;
-import com.ecommerce.dao.entity.Customer;
+import com.ecommerce.dao.entity.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface CreditCardRepository extends PagingAndSortingRepository<CreditCard, Long> {
 
-    Optional<List<CreditCard>> findByCustomer(Customer customer);
+    Optional<List<CreditCard>> findByUser(User user);
 }

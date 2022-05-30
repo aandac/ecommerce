@@ -1,13 +1,12 @@
 package com.ecommerce.service.customer.impl;
 
 import com.ecommerce.controller.customer.model.CustomerCreateRequest;
-import com.ecommerce.dao.entity.Address;
-import com.ecommerce.dao.entity.AddressType;
-import com.ecommerce.dao.entity.CreditCard;
-import com.ecommerce.dao.entity.Customer;
+import com.ecommerce.dao.Roles;
+import com.ecommerce.dao.entity.*;
 import com.ecommerce.dao.repo.AddressRepository;
 import com.ecommerce.dao.repo.CreditCardRepository;
-import com.ecommerce.dao.repo.CustomerRepository;
+import com.ecommerce.dao.repo.UserRoleRepository;
+import com.ecommerce.dao.repo.UserRepository;
 import com.ecommerce.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,25 +19,31 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final CreditCardRepository creditCardRepository;
+    private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void createCustomer(CustomerCreateRequest request) {
-        var customer = Customer.builder()
+        var customer = User.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .build();
-        customerRepository.save(customer);
+        userRepository.save(customer);
+
+        userRoleRepository.save(UserRole.builder()
+                .user(customer)
+                .role(Roles.CUSTOMER)
+                .build());
 
         if (StringUtils.hasText(request.billingAddress())) {
             addressRepository.save(
                     Address.builder()
                             .addressType(AddressType.BILLING_ADDRESS)
                             .addressLine(request.billingAddress())
-                            .customer(customer)
+                            .user(customer)
                             .build());
         }
         if (StringUtils.hasText(request.shippingAddress())) {
@@ -46,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
                     Address.builder()
                             .addressType(AddressType.SHIPPING_ADDRESS)
                             .addressLine(request.shippingAddress())
-                            .customer(customer)
+                            .user(customer)
                             .build());
         }
 
@@ -57,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
                             .creditCardMonth(request.creditCardExpireMonth())
                             .creditCardYear(request.creditCardExpireYear())
                             .creditCardCvv(request.creditCardCvv())
-                            .customer(customer)
+                            .user(customer)
                             .build());
         }
     }

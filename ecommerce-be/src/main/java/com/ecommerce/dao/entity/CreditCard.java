@@ -20,8 +20,8 @@ public class CreditCard {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Customer customer;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Column
     private String creditCardNumber;

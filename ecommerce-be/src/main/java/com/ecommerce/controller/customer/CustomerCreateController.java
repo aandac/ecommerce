@@ -1,4 +1,4 @@
-package com.ecommerce.controller;
+package com.ecommerce.controller.customer;
 
 import com.ecommerce.controller.customer.model.CustomerCreateRequest;
 import com.ecommerce.controller.model.BaseResponse;

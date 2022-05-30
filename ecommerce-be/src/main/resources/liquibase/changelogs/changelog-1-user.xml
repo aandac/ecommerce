@@ -6,7 +6,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
     <changeSet id="29.05.2022-17:00" author="ali.andac">
-        <createTable tableName="customer">
+        <createTable tableName="user">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
@@ -17,7 +17,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createIndex tableName="customer" indexName="idx_customer_email">
+        <createIndex tableName="user" indexName="idx_user_email">
             <column name="email"/>
         </createIndex>
 
@@ -25,7 +25,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="customer_id" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="address_type" type="varchar(100)">
@@ -35,11 +35,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="customer_id"
+        <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="address"
-                                 constraintName="fk_address_customer"
+                                 constraintName="fk_address_user"
                                  referencedColumnNames="id"
-                                 referencedTableName="customer"
+                                 referencedTableName="user"
                                  onDelete="CASCADE"
                                  onUpdate="CASCADE"
         />
@@ -47,7 +47,7 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="customer_id" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="credit_card_number" type="varchar(16)"/>
@@ -55,14 +55,24 @@
             <column name="credit_card_year" type="tinyint"/>
             <column name="credit_card_cvv" type="tinyint"/>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="customer_id"
+        <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="credit_card"
-                                 constraintName="fk_credit_card_customer"
+                                 constraintName="fk_credit_card_user"
                                  referencedColumnNames="id"
-                                 referencedTableName="customer"
+                                 referencedTableName="user"
                                  onDelete="CASCADE"
                                  onUpdate="CASCADE"
         />
+
+        <createTable tableName="user_role">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(16)"/>
+        </createTable>
 
 
     </changeSet>

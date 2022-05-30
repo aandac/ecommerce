@@ -6,5 +6,4 @@ public interface CustomerService {
 
     void createCustomer(CustomerCreateRequest request);
 
-
 }

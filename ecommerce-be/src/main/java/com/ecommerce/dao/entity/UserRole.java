@@ -1,5 +1,6 @@
 package com.ecommerce.dao.entity;
 
+import com.ecommerce.dao.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,22 +9,22 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "customer")
+@Table(name = "user_role")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class UserRole {
     @Id
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String email;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-    @Column(nullable = false)
-    private String password;
-
-
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Roles role;
 }

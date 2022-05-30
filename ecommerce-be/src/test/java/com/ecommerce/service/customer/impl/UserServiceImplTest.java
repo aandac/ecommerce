@@ -4,19 +4,19 @@ import com.ecommerce.DatabaseTest;
 import com.ecommerce.controller.customer.model.CustomerCreateRequest;
 import com.ecommerce.dao.repo.AddressRepository;
 import com.ecommerce.dao.repo.CreditCardRepository;
-import com.ecommerce.dao.repo.CustomerRepository;
+import com.ecommerce.dao.repo.UserRepository;
 import com.ecommerce.service.customer.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CustomerServiceImplTest extends DatabaseTest {
+class UserServiceImplTest extends DatabaseTest {
 
     @Autowired
     private CustomerService customerService;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AddressRepository addressRepository;
@@ -41,7 +41,7 @@ class CustomerServiceImplTest extends DatabaseTest {
         customerService.createCustomer(request);
         // THEN
 
-        var customers = customerRepository.findAll();
+        var customers = userRepository.findAll();
         assertThat(customers.iterator().next()).isNotNull();
     }
 
@@ -62,10 +62,10 @@ class CustomerServiceImplTest extends DatabaseTest {
         customerService.createCustomer(request);
         // THEN
 
-        var customer = customerRepository.findByEmail(request.email());
+        var customer = userRepository.findByEmailWithRoles(request.email());
         assertThat(customer).isPresent();
         assertThat(customer.get()).isNotNull();
-        var addressList = addressRepository.findByCustomer(customer.get());
+        var addressList = addressRepository.findByUser(customer.get());
         assertThat(addressList).isPresent();
         assertThat(addressList.get()).hasSize(1);
     }
@@ -87,14 +87,14 @@ class CustomerServiceImplTest extends DatabaseTest {
         customerService.createCustomer(request);
         // THEN
 
-        var customer = customerRepository.findByEmail(request.email());
+        var customer = userRepository.findByEmailWithRoles(request.email());
         assertThat(customer).isPresent();
         assertThat(customer.get()).isNotNull();
-        var addressList = addressRepository.findByCustomer(customer.get());
+        var addressList = addressRepository.findByUser(customer.get());
         assertThat(addressList).isPresent();
         assertThat(addressList.get()).hasSize(2);
 
-        var cardList = creditCardRepository.findByCustomer(customer.get());
+        var cardList = creditCardRepository.findByUser(customer.get());
         assertThat(cardList).isPresent();
         assertThat(cardList.get()).isEmpty();
     }
@@ -115,14 +115,14 @@ class CustomerServiceImplTest extends DatabaseTest {
         customerService.createCustomer(request);
 
         // THEN
-        var customer = customerRepository.findByEmail(request.email());
+        var customer = userRepository.findByEmailWithRoles(request.email());
         assertThat(customer).isPresent();
         assertThat(customer.get()).isNotNull();
-        var addressList = addressRepository.findByCustomer(customer.get());
+        var addressList = addressRepository.findByUser(customer.get());
         assertThat(addressList).isPresent();
         assertThat(addressList.get()).hasSize(2);
 
-        var cardList = creditCardRepository.findByCustomer(customer.get());
+        var cardList = creditCardRepository.findByUser(customer.get());
         assertThat(cardList).isPresent();
         assertThat(cardList.get()).hasSize(1);
     }
