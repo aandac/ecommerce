@@ -100,7 +100,7 @@ class CustomerServiceImplTest extends DatabaseTest {
     }
 
     @Test
-    void it_should_create_customer_with_credit_cart_successfully() {
+    void it_should_create_customer_with_credit_card_successfully() {
         // GIVEN
         var request = new CustomerCreateRequest(
                 "bulk_address_multiple_with_card@test.com",
@@ -113,8 +113,8 @@ class CustomerServiceImplTest extends DatabaseTest {
         );
         // WHEN
         customerService.createCustomer(request);
-        // THEN
 
+        // THEN
         var customer = customerRepository.findByEmail(request.email());
         assertThat(customer).isPresent();
         assertThat(customer.get()).isNotNull();
