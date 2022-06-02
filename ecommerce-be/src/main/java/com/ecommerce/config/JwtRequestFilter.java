@@ -2,6 +2,7 @@ package com.ecommerce.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Objects;
 
 
 @Component
@@ -91,6 +93,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(null);
                 }
 
+            }
+            if (Objects.isNull(SecurityContextHolder.getContext().getAuthentication()) && request.getRequestURI().startsWith("/api")) {
+                throw new BadCredentialsException("JWT token is required");
             }
             chain.doFilter(request, response);
         } catch (Exception e) {
