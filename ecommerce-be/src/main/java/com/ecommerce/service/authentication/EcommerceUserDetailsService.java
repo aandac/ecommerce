@@ -1,4 +1,4 @@
-package com.ecommerce.service.customer;
+package com.ecommerce.service.authentication;
 
 import com.ecommerce.dao.entity.UserRole;
 import com.ecommerce.service.users.UserService;

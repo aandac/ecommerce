@@ -1,47 +1,51 @@
 package com.ecommerce.dao.entity;
 
+import com.ecommerce.service.merchant.model.ShipmentDeliveryTimes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(name = "credit_card")
+@Table(name = "product")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCard {
+public class Product {
     @Id
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @Column
-    private String creditCardNumber;
 
     @Column
-    private Short creditCardMonth;
-
+    private String sku;
     @Column
-    private Short creditCardYear;
-
+    private BigDecimal price;
     @Column
-    private Short creditCardCvv;
+    private Long inventory;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private ShipmentDeliveryTimes shipmentDeliveryTimes;
+    @Column
+    private Boolean active;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CreditCard)) return false;
-        CreditCard that = (CreditCard) o;
-        return Objects.equals(id, that.id);
+        if (!(o instanceof Product)) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id);
     }
 
     @Override
@@ -51,11 +55,12 @@ public class CreditCard {
 
     @Override
     public String toString() {
-        return "CreditCard{" +
-                "creditCardNumber='" + creditCardNumber + '\'' +
-                ", creditCardMonth=" + creditCardMonth +
-                ", creditCardYear=" + creditCardYear +
-                ", creditCardCvv=" + creditCardCvv +
+        return "Product{" +
+                "sku='" + sku + '\'' +
+                ", price=" + price +
+                ", inventory=" + inventory +
+                ", shipmentDeliveryTimes=" + shipmentDeliveryTimes +
+                ", active=" + active +
                 '}';
     }
 }

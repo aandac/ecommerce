@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="04.05.2022-09:00" author="ali.andac">
+        <createTable tableName="product">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sku" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inventory" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shipment_delivery_times" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValue="true"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="product"
+                                 constraintName="fk_product_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+        />
+        <createTable tableName="product_image">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_name" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="product_id"
+                                 baseTableName="product_image"
+                                 constraintName="fk_product_image_product"
+                                 referencedColumnNames="id"
+                                 referencedTableName="product"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+        />
+
+    </changeSet>
+
+</databaseChangeLog>

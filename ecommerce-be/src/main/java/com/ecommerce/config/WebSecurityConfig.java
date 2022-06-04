@@ -1,7 +1,7 @@
 package com.ecommerce.config;
 
 import com.ecommerce.dao.Roles;
-import com.ecommerce.service.customer.EcommerceUserDetailsService;
+import com.ecommerce.service.authentication.EcommerceUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

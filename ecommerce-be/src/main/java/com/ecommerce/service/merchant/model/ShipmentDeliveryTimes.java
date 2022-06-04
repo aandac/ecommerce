@@ -1,4 +1,4 @@
-package com.ecommerce.controller.merchant.model;
+package com.ecommerce.service.merchant.model;
 
 public enum ShipmentDeliveryTimes {
 

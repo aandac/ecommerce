@@ -4,6 +4,7 @@ package com.ecommerce.controller.merchant;
 import com.ecommerce.controller.merchant.model.MerchantProductCreateRequest;
 import com.ecommerce.dao.Roles;
 import com.ecommerce.service.auth.EcommerceAppAuthenticationService;
+import com.ecommerce.service.merchant.MerchantCreateProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import java.util.List;
 public class MerchantProductController {
 
     private final EcommerceAppAuthenticationService authenticationService;
+    private final MerchantCreateProductService merchantCreateProductService;
 
     @RequestMapping(
             path = "/api/merchant/product",
@@ -36,7 +38,7 @@ public class MerchantProductController {
     @Operation(tags = "merchant", description = "Creates a product")
     public ResponseEntity<Object> createProduct(
             @Valid @RequestPart("body") MerchantProductCreateRequest request,
-            @RequestPart("file") List<MultipartFile> documents
+            @RequestPart(value = "file", required = false) List<MultipartFile> documents
     ) throws HttpClientErrorException {
 
         var user = authenticationService.getAuthenticatedUserWithRoles()
@@ -46,10 +48,9 @@ public class MerchantProductController {
                         "User not found"
                 ));
 
-
         log.info("data {}", request);
         log.info("file size {}", documents.size());
-        documents.forEach(d -> log.info("file name {}", d.getOriginalFilename()));
+        merchantCreateProductService.createProduct(user, request, documents);
 
         return ResponseEntity.ok().body("hello");
     }

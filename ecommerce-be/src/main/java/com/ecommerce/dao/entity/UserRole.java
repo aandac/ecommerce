@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user_role")
@@ -27,4 +28,24 @@ public class UserRole {
     @Column
     @Enumerated(EnumType.STRING)
     private Roles role;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserRole)) return false;
+        UserRole userRole = (UserRole) o;
+        return Objects.equals(id, userRole.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "UserRole{" +
+                "role=" + role +
+                '}';
+    }
 }

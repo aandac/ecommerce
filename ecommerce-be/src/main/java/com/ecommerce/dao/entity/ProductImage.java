@@ -9,38 +9,31 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "credit_card")
+@Table(name = "product_image")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCard {
+public class ProductImage {
+
     @Id
     @Column(name = "id", updatable = false, unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
 
     @Column
-    private String creditCardNumber;
-
-    @Column
-    private Short creditCardMonth;
-
-    @Column
-    private Short creditCardYear;
-
-    @Column
-    private Short creditCardCvv;
+    private String fileName;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CreditCard)) return false;
-        CreditCard that = (CreditCard) o;
+        if (!(o instanceof ProductImage)) return false;
+        ProductImage that = (ProductImage) o;
         return Objects.equals(id, that.id);
     }
 
@@ -51,11 +44,8 @@ public class CreditCard {
 
     @Override
     public String toString() {
-        return "CreditCard{" +
-                "creditCardNumber='" + creditCardNumber + '\'' +
-                ", creditCardMonth=" + creditCardMonth +
-                ", creditCardYear=" + creditCardYear +
-                ", creditCardCvv=" + creditCardCvv +
+        return "ProductImage{" +
+                "fileName='" + fileName + '\'' +
                 '}';
     }
 }
