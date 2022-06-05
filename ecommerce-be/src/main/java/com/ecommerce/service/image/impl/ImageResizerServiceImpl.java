@@ -28,7 +28,7 @@ public class ImageResizerServiceImpl implements ImageResizerService {
         byte[] object;
         var url = String.format(imageResizerProperties.getUrl(),
                 URLDecoder.decode(sourceImageUrl, StandardCharsets.UTF_8));
-        log.debug("resize url {]", url);
+        log.debug("resize url {}", url);
         object = restTemplate.getForObject(URI.create(url), byte[].class);
         if (object == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Image resizer error");

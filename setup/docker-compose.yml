@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   transformimgs:
     image: pixboost/transformimgs
@@ -17,8 +17,11 @@ services:
       - HOSTNAME=localstack
       - SERVICES=s3
       - AWS_DEFAULT_REGION=us-east-1
+      - DATA_DIR=/tmp/localstack/data
+      - HOSTNAME_EXTERNAL= localhost
     ports:
-      - '4566-4583:4566-4583'
+      - "127.0.0.1:4510-4559:4510-4559"  # external service port range
+      - "127.0.0.1:4566:4566"            # LocalStack Edge Proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./localstack-data:/tmp/localstack

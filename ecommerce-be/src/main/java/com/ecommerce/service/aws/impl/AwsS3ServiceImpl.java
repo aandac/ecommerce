@@ -41,7 +41,7 @@ public class AwsS3ServiceImpl implements AwsS3Service {
         try {
             scratchFile = File.createTempFile("prefix", "suffix");
             FileCopyUtils.copy(inputStream, new FileOutputStream(scratchFile));
-            fileUrl = awsS3Config.getS3EndpointUrl() + "/" + bucketName + "/" + fileName;
+            fileUrl = awsS3Config.getS3ExternalEndpointUrl() + "/" + bucketName + "/" + fileName;
             var putObjectResult = amazonS3.putObject(bucketName, fileName, scratchFile);
             if (Objects.isNull(putObjectResult)) {
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Aws S3 file upload error");

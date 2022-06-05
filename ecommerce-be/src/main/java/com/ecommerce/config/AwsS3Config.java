@@ -20,6 +20,9 @@ public class AwsS3Config {
   @Value("${config.aws.s3.url}")
   private String s3EndpointUrl;
 
+  @Value("${config.aws.s3.external.url}")
+  private String s3ExternalEndpointUrl;
+
   @Value("${config.aws.s3.bucket-name}")
   private String bucketName;
 

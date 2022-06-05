@@ -47,13 +47,17 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
             for (MultipartFile multipartFile : documents) {
                 AwsS3Object uploadS3Object;
                 try {
-                    var tempImage = awsS3Service.uploadToS3(UUID.randomUUID().toString(),
+                    var tempImage = awsS3Service.uploadToS3(
+                            UUID.randomUUID().toString(),
                             multipartFile.getInputStream(),
-                            true);
+                            true
+                    );
                     var resizedImage = imageResizerService.resizeImage(tempImage.fileUrl());
                     String fileName = UUID.randomUUID() + getExtensionByStringHandling(multipartFile.getOriginalFilename()).orElse("");
-                    uploadS3Object = awsS3Service.uploadToS3(fileName,
-                            resizedImage);
+                    uploadS3Object = awsS3Service.uploadToS3(
+                            fileName,
+                            resizedImage
+                    );
                     awsS3Service.deleteS3Object(tempImage.fileName(), true);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -70,6 +74,6 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
     public Optional<String> getExtensionByStringHandling(String filename) {
         return Optional.ofNullable(filename)
                 .filter(f -> f.contains("."))
-                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
+                .map(f -> f.substring(filename.lastIndexOf(".")));
     }
 }
