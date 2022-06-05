@@ -11,7 +11,7 @@ public record MerchantProductCreateRequest(
         @NotNull
         BigDecimal price,
         @NotNull
-        Integer inventory,
+        Long inventory,
         @NotNull
         ShipmentDeliveryTimes shipmentDeliveryTimes,
         @NotNull
