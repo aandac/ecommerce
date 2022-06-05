@@ -23,6 +23,9 @@ public class AwsS3Config {
   @Value("${config.aws.s3.bucket-name}")
   private String bucketName;
 
+  @Value("${config.aws.s3.temp-bucket-name}")
+  private String tempBucketName;
+
   @Value("${config.aws.s3.access-key}")
   private String accessKey;
 

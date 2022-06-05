@@ -1,7 +1,6 @@
 package com.ecommerce.service.aws.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.ecommerce.config.AwsS3Config;
 import com.ecommerce.service.aws.AwsS3Service;
@@ -30,14 +29,20 @@ public class AwsS3ServiceImpl implements AwsS3Service {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public AwsS3Object uploadToS3(String fileName, InputStream inputStream) {
-        log.debug("Uploading file '{}' to bucket: '{}' ", fileName, awsS3Config.getBucketName());
+        return uploadToS3(fileName, inputStream, false);
+    }
+
+    @Override
+    public AwsS3Object uploadToS3(String fileName, InputStream inputStream, boolean tempDirectory) {
+        String bucketName = tempDirectory ? awsS3Config.getTempBucketName() : awsS3Config.getBucketName();
+        log.debug("Uploading file '{}' to bucket: '{}' ", fileName, bucketName);
         File scratchFile = null;
         String fileUrl;
         try {
             scratchFile = File.createTempFile("prefix", "suffix");
             FileCopyUtils.copy(inputStream, new FileOutputStream(scratchFile));
-            fileUrl = awsS3Config.getS3EndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
-            var putObjectResult = amazonS3.putObject(awsS3Config.getBucketName(), fileName, scratchFile);
+            fileUrl = awsS3Config.getS3EndpointUrl() + "/" + bucketName + "/" + fileName;
+            var putObjectResult = amazonS3.putObject(bucketName, fileName, scratchFile);
             if (Objects.isNull(putObjectResult)) {
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Aws S3 file upload error");
             }
@@ -57,5 +62,12 @@ public class AwsS3ServiceImpl implements AwsS3Service {
         log.debug("Downloading file '{}' from bucket: '{}' ", fileName, awsS3Config.getBucketName());
         final S3Object s3Object = amazonS3.getObject(awsS3Config.getBucketName(), fileName);
         return s3Object.getObjectContent();
+    }
+
+    @Override
+    public void deleteS3Object(String fileName, boolean tempDirectory) {
+        String bucketName = tempDirectory ? awsS3Config.getTempBucketName() : awsS3Config.getBucketName();
+        log.debug("Deleting file '{}' to bucket: '{}' ", fileName, bucketName);
+        amazonS3.deleteObject(bucketName, fileName);
     }
 }

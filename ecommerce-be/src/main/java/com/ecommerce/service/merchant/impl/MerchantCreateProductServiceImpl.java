@@ -8,6 +8,7 @@ import com.ecommerce.dao.repo.ProductImageRepository;
 import com.ecommerce.dao.repo.ProductRepository;
 import com.ecommerce.service.aws.AwsS3Service;
 import com.ecommerce.service.aws.model.AwsS3Object;
+import com.ecommerce.service.image.ImageResizerService;
 import com.ecommerce.service.merchant.MerchantCreateProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,8 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
 
+    private final ImageResizerService imageResizerService;
+
     @Override
     public void createProduct(User user, MerchantProductCreateRequest request, List<MultipartFile> documents) {
         // save product
@@ -43,7 +46,13 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
             for (MultipartFile multipartFile : documents) {
                 AwsS3Object uploadS3Object;
                 try {
-                    uploadS3Object = awsS3Service.uploadToS3(UUID.randomUUID().toString(), multipartFile.getInputStream());
+                    var tempImage = awsS3Service.uploadToS3(UUID.randomUUID().toString(),
+                            multipartFile.getInputStream(),
+                            true);
+                    var resizedImage = imageResizerService.resizeImage(tempImage.fileUrl());
+                    uploadS3Object = awsS3Service.uploadToS3(UUID.randomUUID().toString(),
+                            resizedImage);
+                    awsS3Service.deleteS3Object(tempImage.fileName(), true);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

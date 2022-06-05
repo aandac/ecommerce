@@ -73,6 +73,14 @@
             </column>
             <column name="role" type="varchar(16)"/>
         </createTable>
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="credit_card"
+                                 constraintName="fk_user_role_user"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+        />
 
 
     </changeSet>

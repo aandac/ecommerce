@@ -1,5 +1,11 @@
 version: '3'
 services:
+  transformimgs:
+    image: pixboost/transformimgs
+    environment:
+      MAGICK_TIME_LIMIT: "90"
+    ports:
+      - "9090:8080"
   localstack:
     container_name: localstack
     image: localstack/localstack:latest
@@ -15,16 +21,17 @@ services:
       - '4566-4583:4566-4583'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./files:/tmp/localstack
+      - ./localstack-data:/tmp/localstack
       - ./script/localstack/s3/init-s3-bucket.sh:/docker-entrypoint-initaws.d/init-s3-bucket.sh
   postgres:
     image: postgres:alpine3.16
     environment: [
       POSTGRES_USER=postgres,
       POSTGRES_PASSWORD=postgres,
-      PGDATA=/var/lib/postgresql/data/pgdata,
-      D:\\temp\\ecommerce:/var/lib/postgresql/data
+      PGDATA=/var/lib/postgresql/data/pgdata
     ]
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 

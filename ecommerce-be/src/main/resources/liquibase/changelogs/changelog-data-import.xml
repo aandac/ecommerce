@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="05.05.2022-17:00" author="ali.andac">
+        <sql splitStatements="true">
+            INSERT INTO ecommerce.USER (email, password) VALUES ('admin@ecommerce.com','$2a$10$70RdWkXtDY8gVEBEJB0pYe4o54EH9vsGxNK9hnG8lyjIsTmEBUw92');
+            INSERT INTO ecommerce.USER_ROLE (user_id, role) VALUES ((SELECT ID FROM ecommerce.USER WHERE email='admin@ecommerce.com'),'ADMIN');
+            INSERT INTO ecommerce.USER (email, password) VALUES ('merchant@ecommerce.com','$2a$10$70RdWkXtDY8gVEBEJB0pYe4o54EH9vsGxNK9hnG8lyjIsTmEBUw92');
+            INSERT INTO ecommerce.USER_ROLE (user_id, role) VALUES ((SELECT ID FROM ecommerce.USER WHERE email='merchant@ecommerce.com'),'MERCHANT');
+        </sql>
+
+    </changeSet>
+
+</databaseChangeLog>
