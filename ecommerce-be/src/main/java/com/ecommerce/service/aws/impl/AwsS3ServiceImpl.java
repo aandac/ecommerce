@@ -32,9 +32,15 @@ public class AwsS3ServiceImpl implements AwsS3Service {
     public AwsS3Object uploadToS3(String fileName, InputStream inputStream) {
         log.debug("Uploading file '{}' to bucket: '{}' ", fileName, awsS3Config.getBucketName());
         File scratchFile = null;
+        String fileUrl;
         try {
             scratchFile = File.createTempFile("prefix", "suffix");
             FileCopyUtils.copy(inputStream, new FileOutputStream(scratchFile));
+            fileUrl = awsS3Config.getS3EndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
+            var putObjectResult = amazonS3.putObject(awsS3Config.getBucketName(), fileName, scratchFile);
+            if (Objects.isNull(putObjectResult)) {
+                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Aws S3 file upload error");
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -42,11 +48,7 @@ public class AwsS3ServiceImpl implements AwsS3Service {
                 scratchFile.delete();
             }
         }
-        var fileUrl = awsS3Config.getS3EndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
-        var putObjectResult = amazonS3.putObject(awsS3Config.getBucketName(), fileName, scratchFile);
-        if (Objects.isNull(putObjectResult)) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Aws S3 file upload error");
-        }
+
         return new AwsS3Object(fileName, fileUrl);
     }
 

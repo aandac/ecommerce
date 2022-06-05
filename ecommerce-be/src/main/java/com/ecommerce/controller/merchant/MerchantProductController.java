@@ -6,6 +6,7 @@ import com.ecommerce.dao.Roles;
 import com.ecommerce.service.auth.EcommerceAppAuthenticationService;
 import com.ecommerce.service.merchant.MerchantCreateProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,11 @@ public class MerchantProductController {
             consumes = {
                     MediaType.MULTIPART_FORM_DATA_VALUE
             })
-    @Operation(tags = "merchant", description = "Creates a product")
+    @Operation(
+            tags = "merchant",
+            description = "Creates a product",
+            security = {@SecurityRequirement(name = "bearer-key")}
+    )
     public ResponseEntity<Object> createProduct(
             @Valid @RequestPart("body") MerchantProductCreateRequest request,
             @RequestPart(value = "file", required = false) List<MultipartFile> documents

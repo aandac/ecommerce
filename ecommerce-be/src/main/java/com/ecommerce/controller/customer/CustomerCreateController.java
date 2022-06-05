@@ -4,6 +4,7 @@ import com.ecommerce.controller.customer.model.CustomerCreateRequest;
 import com.ecommerce.controller.model.BaseResponse;
 import com.ecommerce.service.customer.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,11 @@ public class CustomerCreateController {
     private final CustomerService customerService;
 
     @PostMapping
-    @Operation(tags = "customer", description = "Creates a customer with given parameters")
+    @Operation(
+            tags = "customer",
+            description = "Creates a customer with given parameters",
+            security = {@SecurityRequirement(name = "bearer-key")}
+    )
     public BaseResponse createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
         customerService.createCustomer(request);
         return BaseResponse.builder()
