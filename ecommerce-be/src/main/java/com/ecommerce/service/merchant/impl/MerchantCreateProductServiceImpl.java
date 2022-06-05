@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -50,7 +51,8 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
                             multipartFile.getInputStream(),
                             true);
                     var resizedImage = imageResizerService.resizeImage(tempImage.fileUrl());
-                    uploadS3Object = awsS3Service.uploadToS3(UUID.randomUUID().toString(),
+                    String fileName = UUID.randomUUID() + getExtensionByStringHandling(multipartFile.getOriginalFilename()).orElse("");
+                    uploadS3Object = awsS3Service.uploadToS3(fileName,
                             resizedImage);
                     awsS3Service.deleteS3Object(tempImage.fileName(), true);
                 } catch (IOException e) {
@@ -63,5 +65,11 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
                         .build());
             }
         }
+    }
+
+    public Optional<String> getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
     }
 }

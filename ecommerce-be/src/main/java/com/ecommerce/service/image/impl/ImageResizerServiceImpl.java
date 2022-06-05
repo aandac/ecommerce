@@ -12,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Service
@@ -23,9 +25,11 @@ public class ImageResizerServiceImpl implements ImageResizerService {
     @Override
     public InputStream resizeImage(String sourceImageUrl) {
         var restTemplate = new RestTemplate();
+        byte[] object;
         var url = String.format(imageResizerProperties.getUrl(),
-                sourceImageUrl);
-        byte[] object = restTemplate.getForObject(URI.create(url), byte[].class);
+                URLDecoder.decode(sourceImageUrl, StandardCharsets.UTF_8));
+        log.debug("resize url {]", url);
+        object = restTemplate.getForObject(URI.create(url), byte[].class);
         if (object == null) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Image resizer error");
         }

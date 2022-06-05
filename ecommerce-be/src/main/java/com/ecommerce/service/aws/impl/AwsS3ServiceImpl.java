@@ -46,7 +46,8 @@ public class AwsS3ServiceImpl implements AwsS3Service {
             if (Objects.isNull(putObjectResult)) {
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Aws S3 file upload error");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            log.error("error on uploading file to s3 ", e);
             throw new RuntimeException(e);
         } finally {
             if (scratchFile != null && scratchFile.exists()) {
