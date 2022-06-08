@@ -36,6 +36,7 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
         // save product
         var savedProduct = productRepository.save(Product.builder()
                 .user(user)
+                .title(request.title())
                 .sku(request.sku())
                 .inventory(request.inventory())
                 .price(request.price())

@@ -6,7 +6,10 @@ import com.ecommerce.dao.Roles;
 import com.ecommerce.service.auth.EcommerceAppAuthenticationService;
 import com.ecommerce.service.merchant.MerchantCreateProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import liquibase.repackaged.org.apache.commons.collections4.CollectionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,7 +45,9 @@ public class MerchantProductController {
             security = {@SecurityRequirement(name = "bearer-key")}
     )
     public ResponseEntity<Object> createProduct(
-            @Valid @RequestPart("body") MerchantProductCreateRequest request,
+            @Valid @RequestPart("body")
+            @Parameter(schema = @Schema(type = "string", format = "binary"))
+            MerchantProductCreateRequest request,
             @RequestPart(value = "file", required = false) List<MultipartFile> documents
     ) throws HttpClientErrorException {
 
@@ -54,7 +59,7 @@ public class MerchantProductController {
                 ));
 
         log.info("data {}", request);
-        log.info("file size {}", documents.size());
+        log.info("file size {}", CollectionUtils.isEmpty(documents) ? 0 : documents.size());
         merchantCreateProductService.createProduct(user, request, documents);
 
         return ResponseEntity.ok().body("hello");

@@ -3,16 +3,21 @@
     <CContainer fluid>
       <CHeaderNav class="d-none d-md-flex me-auto">
         <CNavItem>
-          <CNavLink href="/">Products</CNavLink>
+          <CNavLink href="/">Ecommerce App</CNavLink>
         </CNavItem>
       </CHeaderNav>
       <CHeaderNav>
         <CNavItem>
-          <CNavLink href="#">
-            <CIcon class="mx-2" icon="cil-bell" size="lg" />
+          <CNavLink href="/login">Login</CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink href="/register">Register</CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink href="/cart">
+            <CIcon class="mx-2" icon="cil-cart" size="lg" />
           </CNavLink>
         </CNavItem>
-        <AppHeaderDropdownAccnt />
       </CHeaderNav>
     </CContainer>
     <CHeaderDivider />
@@ -24,13 +29,11 @@
 
 <script>
 import AppBreadcrumb from './AppBreadcrumb'
-import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'
 
 export default {
   name: 'AppHeader',
   components: {
     AppBreadcrumb,
-    AppHeaderDropdownAccnt,
   },
 }
 </script>

@@ -10,7 +10,7 @@ public interface AwsS3Service {
 
     AwsS3Object uploadToS3(String fileName, InputStream inputStream, boolean tempDirectory);
 
-    InputStream downloadFromS3(String fileName);
+    String generateLink(String fileName);
 
     void deleteS3Object(String fileName, boolean tempDirectory);
 }

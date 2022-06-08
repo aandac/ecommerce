@@ -6,9 +6,9 @@ const state = {
   defaultRoute: '/',
 }
 const actions = {
-  async LOGIN_MEMBER(context, payload) {
+  async LOGIN(context, payload) {
     return new Promise((resolve, reject) => {
-      context.commit('LOGOUT_MEMBER')
+      context.commit('LOGOUT')
 
       const success = (token, res) => {
         localStorage.setItem('token', token)

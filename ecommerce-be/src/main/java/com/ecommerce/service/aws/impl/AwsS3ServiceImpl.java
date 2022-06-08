@@ -59,10 +59,8 @@ public class AwsS3ServiceImpl implements AwsS3Service {
     }
 
     @Override
-    public InputStream downloadFromS3(String fileName) {
-        log.debug("Downloading file '{}' from bucket: '{}' ", fileName, awsS3Config.getBucketName());
-        final S3Object s3Object = amazonS3.getObject(awsS3Config.getBucketName(), fileName);
-        return s3Object.getObjectContent();
+    public String generateLink(String fileName) {
+        return awsS3Config.getS3EndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
     }
 
     @Override

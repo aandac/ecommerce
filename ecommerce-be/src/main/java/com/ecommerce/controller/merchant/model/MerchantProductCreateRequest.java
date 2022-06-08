@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 
 public record MerchantProductCreateRequest(
         @NotNull
+        String title,
+        @NotNull
         String sku,
         @NotNull
         BigDecimal price,

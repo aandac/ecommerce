@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -27,7 +28,12 @@ public class Product {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @OneToMany(targetEntity = ProductImage.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Set<ProductImage> images;
 
+    @Column
+    private String title;
     @Column
     private String sku;
     @Column
@@ -57,6 +63,7 @@ public class Product {
     public String toString() {
         return "Product{" +
                 "sku='" + sku + '\'' +
+                ",title='" + title + '\'' +
                 ", price=" + price +
                 ", inventory=" + inventory +
                 ", shipmentDeliveryTimes=" + shipmentDeliveryTimes +

@@ -4,9 +4,17 @@
       <CCol>
         <CCard class="mb-4">
           <CCardHeader> Ecommerce App Products</CCardHeader>
-          <CCardBody> Products will be listed in here </CCardBody>
+          <CCardBody> Carts in here</CCardBody>
         </CCard>
       </CCol>
     </CRow>
   </div>
 </template>
+
+<script>
+// import { getProductList } from '@/api/product-api'
+
+export default {
+  methods: {},
+}
+</script>
