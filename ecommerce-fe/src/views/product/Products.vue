@@ -13,7 +13,17 @@
 
             <CRow>
               <CCol xs="6" sm="9">
-                <CButton color="info" shape="rounded-pill" href="#">
+                <CButton
+                  color="info"
+                  shape="rounded-pill"
+                  @click="
+                    this.addToCart(
+                      productItem.id,
+                      productItem.title,
+                      productItem.price,
+                    )
+                  "
+                >
                   Add to Cart
                 </CButton>
               </CCol>
@@ -30,6 +40,7 @@
 
 <script>
 import { getProductList } from '@/api/product-api'
+import { addToCart } from '@/api/cart-api'
 
 export default {
   data: () => {
@@ -42,6 +53,9 @@ export default {
     async loadProductList() {
       const res = await getProductList(0, 0, 10)
       this.productItems = res.data.payload
+    },
+    async addToCart(id, title, price) {
+      await addToCart(id, title, price)
     },
   },
 }

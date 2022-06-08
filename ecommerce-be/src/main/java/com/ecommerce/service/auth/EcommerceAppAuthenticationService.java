@@ -7,4 +7,6 @@ import java.util.Optional;
 public interface EcommerceAppAuthenticationService {
 
     Optional<User> getAuthenticatedUserWithRoles();
+
+    Optional<String> getAuthenticatedUserName();
 }

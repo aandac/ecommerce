@@ -17,14 +17,24 @@ import java.util.Optional;
 public class EcommerceAppAuthenticationServiceImpl implements EcommerceAppAuthenticationService {
 
     private final UserRepository userRepository;
+
     @Override
     public Optional<User> getAuthenticatedUserWithRoles() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (Objects.isNull(authentication) ) {
+        if (Objects.isNull(authentication)) {
             return Optional.empty();
         }
 
         var currentUserName = authentication.getName();
         return userRepository.findByEmailWithRoles(currentUserName);
+    }
+
+    @Override
+    public Optional<String> getAuthenticatedUserName() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (Objects.isNull(authentication)) {
+            return Optional.empty();
+        }
+        return Optional.of(authentication.getName());
     }
 }
