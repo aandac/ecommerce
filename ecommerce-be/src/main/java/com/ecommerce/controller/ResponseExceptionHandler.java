@@ -66,4 +66,20 @@ public class ResponseExceptionHandler {
         return new ResponseEntity<>(response, ex.getStatusCode());
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    protected BaseResponse handleException(Exception ex) {
+        log.error("Internal server error", ex);
+        return BaseResponse.builder()
+                .errors(
+                        Collections.singletonList(
+                                BaseError.builder()
+                                        .id("internal-server-error")
+                                        .message(ex.getMessage())
+                                        .build())
+                )
+                .build();
+    }
+
 }

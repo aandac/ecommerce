@@ -1,5 +1,7 @@
 import { createStore } from 'vuex'
 
+import userModule from '@/store/modules/user-module'
+
 export default createStore({
   state: {
     sidebarVisible: '',
@@ -17,5 +19,7 @@ export default createStore({
     },
   },
   actions: {},
-  modules: {},
+  modules: {
+    userModule,
+  },
 })

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
+import store from '@/store'
 import DefaultLayout from '@/layouts/DefaultLayout'
 
 const routes = [
@@ -16,6 +16,7 @@ const routes = [
       },
       {
         path: '/cart',
+        meta: { authenticated: true },
         name: 'Carts',
         component: () => import('@/views/Carts.vue'),
       },
@@ -38,6 +39,17 @@ const routes = [
   },
 ]
 
+const navigationRules = {
+  authenticated: (to, from, user) => {
+    if (user) {
+      return true
+    } else {
+      store.commit('userModule/LOGOUT')
+      return false
+    }
+  },
+}
+
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
@@ -45,6 +57,40 @@ const router = createRouter({
     // always scroll to top
     return { top: 0 }
   },
+})
+let redirectPath = null
+let redirectParams = {}
+
+router.beforeEach(async (to, from, next) => {
+  redirectPath = null
+  redirectParams = {}
+
+  let user = null
+  try {
+    user = await store.dispatch('userModule/USER')
+    debugger
+  } catch (error) {
+    // if auth not required, don't show any error, continue
+    if (!to.meta.authenticated) {
+      next(true)
+      return
+    }
+
+    // user is necessary to continue but there is an error while getting it
+    next(false)
+    store.commit('userModule/LOGOUT', {
+      redirectAfterLogin: true,
+    })
+    // to show toast notification if necessary
+    alert(error)
+    return
+  }
+
+  if (navigationRules.authenticated(to, from, user)) {
+    next(true)
+    return
+  }
+  next(false)
 })
 
 export default router

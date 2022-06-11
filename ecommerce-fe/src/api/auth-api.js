@@ -6,4 +6,6 @@ const login = (email, password) =>
     password,
   })
 
-export { login }
+const getUser = () => httpClient.get('api/user')
+
+export { login, getUser }
