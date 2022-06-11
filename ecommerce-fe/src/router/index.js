@@ -17,8 +17,8 @@ const routes = [
       {
         path: '/cart',
         meta: { authenticated: true },
-        name: 'Carts',
-        component: () => import('@/views/Carts.vue'),
+        name: 'Cart',
+        component: () => import('@/views/cart/Cart.vue'),
       },
     ],
   },
@@ -68,7 +68,6 @@ router.beforeEach(async (to, from, next) => {
   let user = null
   try {
     user = await store.dispatch('userModule/USER')
-    debugger
   } catch (error) {
     // if auth not required, don't show any error, continue
     if (!to.meta.authenticated) {

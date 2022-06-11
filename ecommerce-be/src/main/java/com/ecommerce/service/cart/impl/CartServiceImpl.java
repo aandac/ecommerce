@@ -7,7 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -22,11 +25,12 @@ public class CartServiceImpl implements CartService {
         if (Objects.isNull(cart)) {
             return Collections.emptyList();
         }
+
         return (List<CartItemResponse>) cart;
     }
 
     @Override
-    public void addCartItem(String id, CartItemResponse itemResponse) {
+    public List<CartItemResponse> addCartItem(String id, CartItemResponse itemResponse) {
         var cart = redisTemplate.opsForHash().get("CART", id);
         List<CartItemResponse> list;
         if (Objects.isNull(cart)) {
@@ -47,20 +51,26 @@ public class CartServiceImpl implements CartService {
             list.add(itemResponse);
         }
         redisTemplate.opsForHash().put("CART", id, list);
+        return list;
     }
 
     @Override
-    public void deleteCartItem(String id, CartItemResponse itemResponse) {
+    public List<CartItemResponse> deleteCartItem(String id, String productId) {
         var cart = redisTemplate.opsForHash().get("CART", id);
         if (Objects.isNull(cart)) {
-            return;
+            return null;
         }
         List<CartItemResponse> list = (List<CartItemResponse>) cart;
-        list.stream()
-                .filter(item -> item.getId().equals(itemResponse.getId()))
-                .findAny()
-                .ifPresent(list::remove);
+        if (Objects.isNull(productId)) {
+            list.clear();
+        } else {
+            list.stream()
+                    .filter(item -> item.getId().equals(Long.valueOf(productId)))
+                    .findAny()
+                    .ifPresent(list::remove);
+        }
 
         redisTemplate.opsForHash().put("CART", id, list);
+        return list;
     }
 }

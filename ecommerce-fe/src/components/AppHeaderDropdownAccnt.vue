@@ -7,46 +7,32 @@
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
         Account
       </CDropdownHeader>
-      <CDropdownItem>
-        <CIcon icon="cil-bell" /> Updates
-        <CBadge color="info" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
-      <CDropdownItem>
-        <CIcon icon="cil-envelope-open" /> Messages
-        <CBadge color="success" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
-      <CDropdownItem>
-        <CIcon icon="cil-task" /> Tasks
-        <CBadge color="danger" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
-      <CDropdownItem>
-        <CIcon icon="cil-comment-square" /> Comments
-        <CBadge color="warning" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
+      <div
+        class="text-muted px-3 pt-2 max-width-300-px text-truncate mb-2"
+        :title="user?.email"
+      >
+        {{ user?.email }}
+      </div>
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
         Settings
       </CDropdownHeader>
-      <CDropdownItem> <CIcon icon="cil-user" /> Profile </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-settings" /> Settings </CDropdownItem>
       <CDropdownItem>
-        <CIcon icon="cil-dollar" /> Payments
-        <CBadge color="secondary" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
-      <CDropdownItem>
-        <CIcon icon="cil-file" /> Projects
-        <CBadge color="primary" class="ms-auto">{{ itemsCount }}</CBadge>
+        <CIcon icon="cil-user" />
+        Products
       </CDropdownItem>
       <CDropdownDivider />
-      <CDropdownItem>
-        <CIcon icon="cil-shield-alt" /> Lock Account
+      <CDropdownItem @click="onClickLogout">
+        <CIcon icon="cil-lock-locked" />
+        Logout
       </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-lock-locked" /> Logout </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
 </template>
 
 <script>
-import avatar from '@/assets/images/avatars/8.jpg'
+import avatar from '@/assets/images/avatars/2.jpg'
+import { mapState, mapMutations } from 'vuex'
+
 export default {
   name: 'AppHeaderDropdownAccnt',
   setup() {
@@ -54,6 +40,15 @@ export default {
       avatar: avatar,
       itemsCount: 42,
     }
+  },
+  methods: {
+    ...mapMutations('userModule', ['LOGOUT']),
+    onClickLogout() {
+      this.LOGOUT()
+    },
+  },
+  computed: {
+    ...mapState('userModule', ['user', 'isAdmin']),
   },
 }
 </script>

@@ -38,7 +38,6 @@
                           placeholder="Password"
                           autocomplete="current-password"
                           v-bind="field"
-                          v-model="E3VG5mmq8WCK"
                         />
                       </CInputGroup>
                     </Field>

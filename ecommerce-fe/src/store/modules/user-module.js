@@ -89,11 +89,11 @@ const mutations = {
     ) {
       queryForRedirect = { redirectAfterLogin: router.options.history.location }
     }
-    let noRedirectPages = ['/login', '/register']
+    let noRedirectPages = ['/product', '/login', '/register']
     if (!noRedirectPages.includes(router.currentRoute.value.fullPath)) {
-      let loginUrl = '/login'
+      let homePage = '/'
       router.push({
-        path: loginUrl,
+        path: homePage,
         ...(queryForRedirect && { query: queryForRedirect }),
       })
     }

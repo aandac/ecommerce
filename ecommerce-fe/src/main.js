@@ -6,6 +6,7 @@ import store from '@/store'
 import CoreuiVue from '@coreui/vue'
 import CIcon from '@coreui/icons-vue'
 import { iconsSet as icons } from '@/assets/icons'
+import './../node_modules/bulma/css/bulma.css'
 
 const app = createApp(App)
 app.use(store)

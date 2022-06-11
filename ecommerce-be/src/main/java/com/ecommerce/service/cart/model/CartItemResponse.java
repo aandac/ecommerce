@@ -1,6 +1,8 @@
 package com.ecommerce.service.cart.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,12 +10,14 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CartItemResponse implements Serializable {
     @Serial
     private static final long serialVersionUID = 4257764010347368886L;
     private Long id;
     private String title;
-    private Integer quantity;
+    private Integer quantity = 1;
     private BigDecimal price;
 
     @Override
@@ -29,11 +33,4 @@ public class CartItemResponse implements Serializable {
         return Objects.hash(id);
     }
 
-    public void increaseQuantity() {
-        if (Objects.isNull(quantity)) {
-            quantity = 1;
-        } else {
-            quantity++;
-        }
-    }
 }

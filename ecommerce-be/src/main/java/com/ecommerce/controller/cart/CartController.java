@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/cart")
@@ -48,9 +50,9 @@ public class CartController {
         var userName = authenticationService.getAuthenticatedUserName()
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Authenticated user not provided"));
 
-        cartItem.increaseQuantity();
-        cartService.addCartItem(userName, cartItem);
+        var cartItemList = cartService.addCartItem(userName, cartItem);
         return BaseResponse.builder()
+                .payload(cartItemList)
                 .build();
     }
 
@@ -60,12 +62,13 @@ public class CartController {
             description = "Deletes cart items from the list",
             security = {@SecurityRequirement(name = "bearer-key")}
     )
-    public BaseResponse deleteFromCart(@RequestBody CartItemResponse cartItem) {
+    public BaseResponse deleteFromCart(@RequestParam(value = "productId", required = false) String productId) {
         var userName = authenticationService.getAuthenticatedUserName()
                 .orElseThrow(() -> new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Authenticated user not provided"));
 
-        cartService.deleteCartItem(userName, cartItem);
+        var responseList = cartService.deleteCartItem(userName, productId);
         return BaseResponse.builder()
+                .payload(responseList)
                 .build();
     }
 }
