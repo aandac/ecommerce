@@ -16,7 +16,7 @@
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
         Settings
       </CDropdownHeader>
-      <CDropdownItem>
+      <CDropdownItem href="/merchant">
         <CIcon icon="cil-user" />
         Products
       </CDropdownItem>

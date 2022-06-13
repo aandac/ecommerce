@@ -47,7 +47,7 @@ public class MerchantProductController {
     public ResponseEntity<Object> createProduct(
             @Valid @RequestPart("body")
             @Parameter(schema = @Schema(type = "string", format = "binary"))
-            MerchantProductCreateRequest request,
+            MerchantProductCreateRequest body,
             @RequestPart(value = "file", required = false) List<MultipartFile> documents
     ) throws HttpClientErrorException {
 
@@ -58,9 +58,9 @@ public class MerchantProductController {
                         "User not found"
                 ));
 
-        log.info("data {}", request);
+        log.info("data {}", body);
         log.info("file size {}", CollectionUtils.isEmpty(documents) ? 0 : documents.size());
-        merchantCreateProductService.createProduct(user, request, documents);
+        merchantCreateProductService.createProduct(user, body, documents);
 
         return ResponseEntity.ok().body("hello");
     }
