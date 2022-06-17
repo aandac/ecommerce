@@ -9,9 +9,11 @@ import com.ecommerce.dao.repo.UserRoleRepository;
 import com.ecommerce.dao.repo.UserRepository;
 import com.ecommerce.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Objects;
 
@@ -27,6 +29,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void createCustomer(CustomerCreateRequest request) {
+        if (userRepository.findByEmailWithRoles(request.email()).isPresent()) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Email already in used");
+        }
+
         var customer = User.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))

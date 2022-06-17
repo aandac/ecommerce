@@ -21,7 +21,8 @@
     </ul>
     <div class="buttons">
       <button :disabled="!cartItems.length" class="button is-info">
-        Checkout (<span class="has-text-weight-bold">${{ cartTotal }}</span
+        1-Click Checkout (<span class="has-text-weight-bold"
+          >${{ cartTotal }}</span
         >)
       </button>
 

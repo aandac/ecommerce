@@ -16,11 +16,11 @@
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
         Settings
       </CDropdownHeader>
-      <CDropdownItem href="/merchant">
+      <CDropdownItem v-if="isMerchant" href="/merchant">
         <CIcon icon="cil-user" />
         Products
       </CDropdownItem>
-      <CDropdownDivider />
+      <CDropdownDivide r />
       <CDropdownItem @click="onClickLogout">
         <CIcon icon="cil-lock-locked" />
         Logout
@@ -48,7 +48,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('userModule', ['user', 'isAdmin']),
+    ...mapState('userModule', ['user', 'isAdmin', 'isMerchant']),
   },
 }
 </script>

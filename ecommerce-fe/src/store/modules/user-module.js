@@ -1,9 +1,10 @@
-import { login, getUser } from '@/api/auth-api'
+import { login, getUser, register } from '@/api/auth-api'
 import router from '@/router'
 
 const state = {
   user: null,
   isAdmin: false,
+  isMerchant: false,
   role: null,
   defaultRoute: '/',
 }
@@ -57,6 +58,31 @@ const actions = {
         })
     })
   },
+  async CREATE_USER(context, payload) {
+    return new Promise((resolve, reject) => {
+      register(
+        payload.formData.email,
+        payload.formData.password,
+        payload.formData.shippingAddress,
+        payload.formData.billingAddress,
+        payload.formData.creditCardNumber,
+        payload.formData.creditCardMonth,
+        payload.formData.creditCardYear,
+        payload.formData.creditCardCvv,
+      )
+        .then((res) => {
+          if (res.data?.payload?.token) {
+            localStorage.setItem('token', res.data?.payload?.token)
+          } else {
+            console.error('Error occurred')
+          }
+          resolve(res)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
 }
 const mutations = {
   SET_USER(state, payload) {
@@ -71,6 +97,12 @@ const mutations = {
       state.isAdmin = true
     } else {
       state.isAdmin = false
+    }
+
+    if (payload?.authorities?.includes('MERCHANT')) {
+      state.isMerchant = true
+    } else {
+      state.isMerchant = false
     }
 
     state.defaultRoute = '/'
