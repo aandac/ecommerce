@@ -4,6 +4,7 @@ import com.ecommerce.service.merchant.model.ShipmentDeliveryTimes;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.List;
 
 public record MerchantProductCreateRequest(
         @NotNull
@@ -17,6 +18,8 @@ public record MerchantProductCreateRequest(
         @NotNull
         ShipmentDeliveryTimes shipmentDeliveryTimes,
         @NotNull
-        Boolean active
+        Boolean active,
+        List<String> files
+
 ) {
 }

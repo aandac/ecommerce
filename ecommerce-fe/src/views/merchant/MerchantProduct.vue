@@ -38,28 +38,28 @@
         <option value="TEN_BUSINESS_DAY">10 Business Day Delivery</option>
       </CFormSelect>
     </CCol>
-    <CCol xs="12">
-      <input
-        type="file"
-        ref="file"
-        id="formFileMultiple"
-        multiple
-        @change="onSelect"
-      />
+    <CCol xs="2">
+      <CButton color="info" type="submit" @click="uploadFile"
+        >Upload File
+      </CButton>
+    </CCol>
+    <CCol xs="10">
+      <input type="file" ref="file" id="file" @change="onSelect" />
     </CCol>
     <CCol sm>
-      <CButton color="info" type="submit">Save</CButton>
+      <CButton color="info" @click="saveProduct">Save</CButton>
     </CCol>
   </CForm>
 </template>
 
 <script>
-import { saveProduct } from '@/api/merchant-api'
+import { saveProduct, uploadFiles } from '@/api/merchant-api'
 
 export default {
   data() {
     return {
       files: [],
+      uploadedFile: '',
       title: '',
       shipmentDeliveryTimes: 'THREE_BUSINESS_DAY',
       sku: '',
@@ -71,26 +71,22 @@ export default {
     onSelect() {
       this.files = this.$refs.file.files
     },
-    async onSubmit() {
+    async saveProduct() {
+      await saveProduct(
+        this.sku,
+        this.title,
+        this.price,
+        this.inventory,
+        this.shipmentDeliveryTimes,
+        [this.uploadedFile],
+      )
+    },
+    async uploadFile() {
       const formData = new FormData()
-      debugger
-      const body = {
-        sku: this.sku,
-        title: this.title,
-        price: this.price,
-        inventory: this.inventory,
-        shipmentDeliveryTimes: this.shipmentDeliveryTimes,
-      }
-      formData.append('body', JSON.stringify(body))
-      // Object.entries(body).forEach(([key, value]) => {
-      //   formData.append(key, value)
-      // })
-      formData.append('file', this.files)
-      try {
-        await saveProduct(formData)
-      } catch (err) {
-        console.log(err)
-      }
+      formData.append('file', this.files.item(0))
+      uploadFiles(formData).then((response) => {
+        this.uploadedFile = response.data
+      })
     },
   },
 }

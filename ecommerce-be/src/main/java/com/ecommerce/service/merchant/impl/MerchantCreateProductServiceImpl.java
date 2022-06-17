@@ -17,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,7 +31,7 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
     private final ImageResizerService imageResizerService;
 
     @Override
-    public void createProduct(User user, MerchantProductCreateRequest request, List<MultipartFile> documents) {
+    public Long createProduct(User user, MerchantProductCreateRequest request) {
         // save product
         var savedProduct = productRepository.save(Product.builder()
                 .user(user)
@@ -44,32 +43,38 @@ public class MerchantCreateProductServiceImpl implements MerchantCreateProductSe
                 .active(request.active())
                 .build());
         // upload file
-        if (!CollectionUtils.isEmpty(documents)) {
-            for (MultipartFile multipartFile : documents) {
-                AwsS3Object uploadS3Object;
-                try {
-                    var tempImage = awsS3Service.uploadToS3(
-                            UUID.randomUUID().toString(),
-                            multipartFile.getInputStream(),
-                            true
-                    );
-                    var resizedImage = imageResizerService.resizeImage(tempImage.fileUrl());
-                    String fileName = UUID.randomUUID() + getExtensionByStringHandling(multipartFile.getOriginalFilename()).orElse("");
-                    uploadS3Object = awsS3Service.uploadToS3(
-                            fileName,
-                            resizedImage
-                    );
-                    awsS3Service.deleteS3Object(tempImage.fileName(), true);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
+        if (!CollectionUtils.isEmpty(request.files())) {
+            for (String fileName : request.files()) {
                 productImageRepository.save(ProductImage.builder()
                         .product(savedProduct)
-                        .fileName(uploadS3Object.fileName())
+                        .fileName(fileName)
                         .build());
             }
         }
+        return savedProduct.getId();
+    }
+
+    @Override
+    public String uploadFile(User user, MultipartFile multipartFile) {
+        AwsS3Object uploadS3Object;
+        try {
+            var tempImage = awsS3Service.uploadToS3(
+                    UUID.randomUUID().toString(),
+                    multipartFile.getInputStream(),
+                    true
+            );
+            var resizedImage = imageResizerService.resizeImage(tempImage.fileUrl());
+            String fileName = UUID.randomUUID() + getExtensionByStringHandling(multipartFile.getOriginalFilename()).orElse("");
+            uploadS3Object = awsS3Service.uploadToS3(
+                    fileName,
+                    resizedImage
+            );
+            awsS3Service.deleteS3Object(tempImage.fileName(), true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return uploadS3Object.fileName();
     }
 
     public Optional<String> getExtensionByStringHandling(String filename) {

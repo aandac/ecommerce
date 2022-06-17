@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface MerchantCreateProductService {
 
-    void createProduct(User user, MerchantProductCreateRequest request, List<MultipartFile> documents);
+    Long createProduct(User user, MerchantProductCreateRequest request);
+
+    String uploadFile(User user, MultipartFile multipartFile);
 }

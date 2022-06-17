@@ -64,13 +64,8 @@ const router = createRouter({
     return { top: 0 }
   },
 })
-let redirectPath = null
-let redirectParams = {}
 
 router.beforeEach(async (to, from, next) => {
-  redirectPath = null
-  redirectParams = {}
-
   let user = null
   try {
     user = await store.dispatch('userModule/USER')
