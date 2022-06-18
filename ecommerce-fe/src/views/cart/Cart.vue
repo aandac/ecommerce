@@ -20,7 +20,11 @@
       <br />
     </ul>
     <div class="buttons">
-      <button :disabled="!cartItems.length" class="button is-info">
+      <button
+        @click="checkout"
+        :disabled="!cartItems.length"
+        class="button is-info"
+      >
         1-Click Checkout (<span class="has-text-weight-bold"
           >${{ cartTotal }}</span
         >)
@@ -39,6 +43,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import CartListItem from './CartListItem'
+import { oneClickCheckout } from '@/api/cart-api'
 
 export default {
   name: 'CartList',
@@ -53,6 +58,16 @@ export default {
   },
   methods: {
     ...mapActions(['removeAllCartItems']),
+    async checkout() {
+      oneClickCheckout()
+        .then((response) => {
+          alert('Purchased ' + response.data.payload + ' amount')
+          this.$router.push('/cart')
+        })
+        .catch((error) => {
+          alert(error.response.data.errors[0].message)
+        })
+    },
   },
 }
 </script>

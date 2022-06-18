@@ -3,6 +3,7 @@ package com.ecommerce.controller.user;
 import com.ecommerce.controller.model.BaseResponse;
 import com.ecommerce.controller.user.model.UserResponse;
 import com.ecommerce.dao.entity.UserRole;
+import com.ecommerce.service.customer.CustomerService;
 import com.ecommerce.service.users.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final CustomerService customerService;
 
     @GetMapping
     @Operation(tags = "user",
@@ -50,4 +52,6 @@ public class UserController {
                         .build())
                 .build();
     }
+
+
 }

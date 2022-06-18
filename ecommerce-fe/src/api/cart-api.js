@@ -15,4 +15,12 @@ const deleteFromCart = (id) =>
 
 const deleteAllFromCart = () => httpClient.post('api/cart/delete')
 
-export { getCart, addToCart, deleteFromCart, deleteAllFromCart }
+const oneClickCheckout = () => httpClient.post('api/cart/checkout')
+
+export {
+  getCart,
+  addToCart,
+  deleteFromCart,
+  deleteAllFromCart,
+  oneClickCheckout,
+}

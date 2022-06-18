@@ -12,8 +12,8 @@ const register = (
   shippingAddress,
   billingAddress,
   creditCardNumber,
-  creditCardMonth,
-  creditCardYear,
+  creditCardExpireMonth,
+  creditCardExpireYear,
   creditCardCvv,
 ) =>
   httpClient.post('public/customer', {
@@ -22,8 +22,8 @@ const register = (
     shippingAddress,
     billingAddress,
     creditCardNumber,
-    creditCardMonth,
-    creditCardYear,
+    creditCardExpireMonth,
+    creditCardExpireYear,
     creditCardCvv,
   })
 

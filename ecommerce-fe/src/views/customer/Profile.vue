@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
+  <div class="bg-light">
     <CContainer>
       <CRow class="justify-content-center">
         <CCol :md="9" :lg="7" :xl="6">
@@ -13,68 +13,6 @@
                 as="div"
               >
                 <form @submit="handleSubmit($event, onSubmit)">
-                  <h1>Register</h1>
-                  <p class="text-medium-emphasis">Create your account</p>
-                  <Field
-                    name="email"
-                    v-slot="{ field, /* errors */ errorMessage, meta }"
-                  >
-                    <CInputGroup class="mb-3">
-                      <CInputGroupText>@</CInputGroupText>
-                      <CFormInput
-                        placeholder="Email"
-                        autocomplete="email"
-                        v-bind="field"
-                        :invalid="!!errorMessage"
-                        :valid="meta.valid && meta.touched"
-                      />
-                      <CFormFeedback invalid>
-                        {{ errorMessage }}
-                      </CFormFeedback>
-                    </CInputGroup>
-                  </Field>
-                  <Field
-                    name="password"
-                    v-slot="{ field, /* errors */ errorMessage, meta }"
-                  >
-                    <CInputGroup class="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon="cil-lock-locked" />
-                      </CInputGroupText>
-                      <CFormInput
-                        type="password"
-                        placeholder="Password"
-                        autocomplete="new-password"
-                        v-bind="field"
-                        :invalid="!!errorMessage"
-                        :valid="meta.valid && meta.touched"
-                      />
-                      <CFormFeedback invalid>
-                        {{ errorMessage }}
-                      </CFormFeedback>
-                    </CInputGroup>
-                  </Field>
-                  <Field
-                    name="repeatPassword"
-                    v-slot="{ field, /* errors */ errorMessage, meta }"
-                  >
-                    <CInputGroup class="mb-4">
-                      <CInputGroupText>
-                        <CIcon icon="cil-lock-locked" />
-                      </CInputGroupText>
-                      <CFormInput
-                        type="password"
-                        placeholder="Repeat password"
-                        autocomplete="new-password"
-                        v-bind="field"
-                        :invalid="!!errorMessage"
-                        :valid="meta.valid && meta.touched"
-                      />
-                      <CFormFeedback invalid>
-                        {{ errorMessage }}
-                      </CFormFeedback>
-                    </CInputGroup>
-                  </Field>
                   <Field
                     name="shippingAddress"
                     v-slot="{ field, /* errors */ errorMessage, meta }"
@@ -86,6 +24,7 @@
                       <CFormInput
                         type="text"
                         v-bind="field"
+                        v-model="userDetail.shippingAddress"
                         :invalid="!!errorMessage"
                         :valid="meta.valid && meta.touched"
                         placeholder="Enter shipping address"
@@ -103,6 +42,7 @@
                       <CFormInput
                         type="text"
                         v-bind="field"
+                        v-model="userDetail.billingAddress"
                         :invalid="!!errorMessage"
                         :valid="meta.valid && meta.touched"
                         placeholder="Enter billing address"
@@ -120,6 +60,7 @@
                       <CFormInput
                         type="text"
                         v-bind="field"
+                        v-model="userDetail.creditCardNumber"
                         :invalid="!!errorMessage"
                         :valid="meta.valid && meta.touched"
                         placeholder="Enter credit card number"
@@ -132,26 +73,28 @@
                       <CIcon icon="cil-credit-card" />
                     </CInputGroupText>
                     <Field
-                      name="creditCardMonth"
+                      name="creditCardExpireMonth"
                       v-slot="{ field, /* errors */ errorMessage, meta }"
                     >
                       <CFormInput
                         class="mr-1"
                         type="text"
                         v-bind="field"
+                        v-model="userDetail.creditCardExpireMonth"
                         :invalid="!!errorMessage"
                         :valid="meta.valid && meta.touched"
                         placeholder="month"
                       />
                     </Field>
                     <Field
-                      name="creditCardYear"
+                      name="creditCardExpireYear"
                       v-slot="{ field, /* errors */ errorMessage, meta }"
                     >
                       <CFormInput
                         class="mr-1"
                         type="text"
                         v-bind="field"
+                        v-model="userDetail.creditCardExpireYear"
                         :invalid="!!errorMessage"
                         :valid="meta.valid && meta.touched"
                         placeholder="year"
@@ -164,6 +107,7 @@
                       <CFormInput
                         type="text"
                         v-bind="field"
+                        v-model="userDetail.creditCardCvv"
                         :invalid="!!errorMessage"
                         :valid="meta.valid && meta.touched"
                         placeholder="Enter credit cvv"
@@ -171,7 +115,7 @@
                     </Field>
                   </CInputGroup>
                   <div class="d-grid">
-                    <CButton color="success">Create Account</CButton>
+                    <CButton color="success">Update Profile</CButton>
                   </div>
                 </form>
               </VeeForm>
@@ -182,42 +126,44 @@
     </CContainer>
   </div>
 </template>
-
 <script>
 import * as yup from 'yup'
-import { Form as VeeForm, Field } from 'vee-validate'
+import { Field, Form as VeeForm } from 'vee-validate'
+import { getCustomerDetail } from '@/api/customer-api'
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'Register',
+  name: 'Profile',
   components: {
     Field,
     VeeForm,
   },
+
   data: () => {
     const schema = yup.object({
-      email: yup.string().required().email(),
-      password: yup.string().required().min(8),
-      repeatPassword: yup
-        .string()
-        .required('Repeat Password is a required field')
-        .min(8, 'repeat password must be at least 8 characters')
-        .oneOf([yup.ref('password'), null], 'Passwords must match'),
       creditCardNumber: yup.string().label('Card number').max(16),
       creditCardCvv: yup.string().label('CVC').min(3).max(4),
-      creditCardYear: yup.string().label('Expiry year').min(4).max(4),
-      creditCardMonth: yup.string().label('Expiry month').min(2).max(2),
+      creditCardExpireYear: yup.string().label('Expiry year').min(4).max(4),
+      creditCardExpireMonth: yup.string().label('Expiry month').min(2).max(2),
     })
     return {
       schema,
+      userDetail: '',
     }
   },
+  async mounted() {
+    getCustomerDetail()
+      .then((res) => {
+        this.userDetail = res.data?.payload
+      })
+      .catch((error) => {
+        alert(error)
+      })
+  },
   methods: {
-    ...mapActions('userModule', ['CREATE_USER', 'LOGIN']),
-    async onSubmit(values) {
-      await this.CREATE_USER({ formData: values })
-      await this.LOGIN({ formData: values })
-      this.$router.push('/')
+    ...mapActions('userModule', ['UPDATE_CUSTOMER']),
+    async onSubmit() {
+      await this.UPDATE_CUSTOMER(this.userDetail)
     },
   },
 }

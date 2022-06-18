@@ -26,6 +26,12 @@ const routes = [
         name: 'Merchant Product',
         component: () => import('@/views/merchant/MerchantProduct.vue'),
       },
+      {
+        path: '/profile',
+        meta: { authenticated: true },
+        name: 'Profile',
+        component: () => import('@/views/customer/Profile.vue'),
+      },
     ],
   },
   {

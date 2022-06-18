@@ -73,4 +73,10 @@ public class CartServiceImpl implements CartService {
         redisTemplate.opsForHash().put("CART", id, list);
         return list;
     }
+
+
+    @Override
+    public void deleteAllCartItems(String id) {
+        redisTemplate.opsForHash().delete("CART", id);
+    }
 }

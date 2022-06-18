@@ -1,10 +1,13 @@
 import { login, getUser, register } from '@/api/auth-api'
+import { postUpdateCustomer } from '@/api/customer-api'
 import router from '@/router'
 
 const state = {
   user: null,
+  userDetail: null,
   isAdmin: false,
   isMerchant: false,
+  isCustomer: false,
   role: null,
   defaultRoute: '/',
 }
@@ -83,6 +86,22 @@ const actions = {
         })
     })
   },
+  async UPDATE_CUSTOMER(context, payload) {
+    return new Promise((resolve, reject) => {
+      postUpdateCustomer(payload)
+        .then((res) => {
+          if (res.data?.payload?.token) {
+            localStorage.setItem('token', res.data?.payload?.token)
+          } else {
+            console.error('Error occurred')
+          }
+          resolve(res)
+        })
+        .catch((error) => {
+          reject(error)
+        })
+    })
+  },
 }
 const mutations = {
   SET_USER(state, payload) {
@@ -90,7 +109,7 @@ const mutations = {
 
     // check and set isAdmin state
     if (
-      payload?.authorities?.includes('ADMIN') ||
+      payload?.roles?.includes('ADMIN') ||
       localStorage.getItem('isAdmin') === 'true'
     ) {
       localStorage.setItem('isAdmin', true)
@@ -99,17 +118,16 @@ const mutations = {
       state.isAdmin = false
     }
 
-    if (payload?.authorities?.includes('MERCHANT')) {
-      state.isMerchant = true
-    } else {
-      state.isMerchant = false
-    }
+    state.isMerchant = !!payload?.roles?.includes('MERCHANT')
+    state.isCustomer = !!payload?.roles?.includes('CUSTOMER')
 
     state.defaultRoute = '/'
   },
   LOGOUT(state, payload) {
     state.user = null
     state.isAdmin = null
+    state.isMerchant = null
+    state.isCustomer = null
     state.defaultRoute = '/'
     localStorage.removeItem('token')
     localStorage.removeItem('isAdmin')

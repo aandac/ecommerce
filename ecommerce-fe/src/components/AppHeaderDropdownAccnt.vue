@@ -20,7 +20,11 @@
         <CIcon icon="cil-user" />
         Products
       </CDropdownItem>
-      <CDropdownDivide r />
+      <CDropdownItem v-if="isCustomer" href="/profile">
+        <CIcon icon="cil-user" />
+        Profile
+      </CDropdownItem>
+      <CDropdownDivider />
       <CDropdownItem @click="onClickLogout">
         <CIcon icon="cil-lock-locked" />
         Logout
@@ -48,7 +52,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('userModule', ['user', 'isAdmin', 'isMerchant']),
+    ...mapState('userModule', ['user', 'isAdmin', 'isMerchant', 'isCustomer']),
   },
 }
 </script>
