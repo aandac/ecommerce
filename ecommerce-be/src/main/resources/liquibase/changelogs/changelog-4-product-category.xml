@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="18.06.2022-11:00" author="ali.andac">
+        <addColumn tableName="product">
+            <column name="category_id" type="bigint"/>
+        </addColumn>
+        <createTable tableName="product_category">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="category" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="category_id"
+                                 baseTableName="product"
+                                 constraintName="fk_product_category_product"
+                                 referencedColumnNames="id"
+                                 referencedTableName="product_category"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+        />
+
+
+    </changeSet>
+
+</databaseChangeLog>

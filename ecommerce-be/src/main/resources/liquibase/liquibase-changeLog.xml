@@ -10,5 +10,6 @@
     <include file="classpath:liquibase/changelogs/changelog-2-product.xml"/>
     <include file="classpath:liquibase/changelogs/changelog-data-import.xml"/>
     <include file="classpath:liquibase/changelogs/changelog-3-product-alter.xml"/>
+    <include file="classpath:liquibase/changelogs/changelog-4-product-category.xml"/>
 
 </databaseChangeLog>

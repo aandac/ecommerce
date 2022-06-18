@@ -24,12 +24,24 @@ public class PublicProductController {
             description = "List products for simple way"
     )
     public BaseResponse getProducts(
+            @RequestParam(required = false) String category,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int size
     ) {
-        var products = productService.getProducts(page, size);
+        var products = productService.getProducts(category, page, size);
         return BaseResponse.builder()
                 .payload(products)
+                .build();
+    }
+
+    @GetMapping("/category")
+    @Operation(
+            tags = "products",
+            description = "List all categories"
+    )
+    public BaseResponse getCategories() {
+        return BaseResponse.builder()
+                .payload(productService.getAllCategories())
                 .build();
     }
 }

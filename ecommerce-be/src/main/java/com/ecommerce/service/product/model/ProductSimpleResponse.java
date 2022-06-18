@@ -5,6 +5,7 @@ import java.util.List;
 
 public record ProductSimpleResponse(
         Long id,
+        String category,
         String title,
         List<String> images,
         BigDecimal price

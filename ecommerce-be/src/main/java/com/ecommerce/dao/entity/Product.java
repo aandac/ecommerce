@@ -46,6 +46,10 @@ public class Product {
     @Column
     private Boolean active;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private ProductCategory category;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
