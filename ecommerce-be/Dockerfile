@@ -6,10 +6,10 @@ COPY src /build/src/
 WORKDIR /build/
 RUN mvn package -Dmaven.test.skip
 
-FROM openjdk:17-alpine3.14
+FROM openjdk:17-slim
 
 WORKDIR /app
 
 COPY --from=MAVEN_BUILD /build/target/ecommerce-be-0.0.1-SNAPSHOT.jar /app/
 EXPOSE 8081
-ENTRYPOINT ["java", "-Dspring.profiles.active=test","-jar", "ecommerce-be-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=test", "-jar", "ecommerce-be-0.0.1-SNAPSHOT.jar"]
