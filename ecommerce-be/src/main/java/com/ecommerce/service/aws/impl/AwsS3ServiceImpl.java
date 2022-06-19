@@ -60,7 +60,7 @@ public class AwsS3ServiceImpl implements AwsS3Service {
 
     @Override
     public String generateLink(String fileName) {
-        return awsS3Config.getS3EndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
+        return awsS3Config.getS3ExternalEndpointUrl() + "/" + awsS3Config.getBucketName() + "/" + fileName;
     }
 
     @Override

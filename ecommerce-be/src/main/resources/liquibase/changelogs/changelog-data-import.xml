@@ -11,6 +11,8 @@
             INSERT INTO ecommerce.USER_ROLE (user_id, role) VALUES ((SELECT ID FROM ecommerce.USER WHERE email='admin@ecommerce.com'),'ADMIN');
             INSERT INTO ecommerce.USER (email, password) VALUES ('merchant@ecommerce.com','$2a$10$70RdWkXtDY8gVEBEJB0pYe4o54EH9vsGxNK9hnG8lyjIsTmEBUw92');
             INSERT INTO ecommerce.USER_ROLE (user_id, role) VALUES ((SELECT ID FROM ecommerce.USER WHERE email='merchant@ecommerce.com'),'MERCHANT');
+            INSERT INTO ecommerce.USER (email, password) VALUES ('customer@ecommerce.com','$2a$10$70RdWkXtDY8gVEBEJB0pYe4o54EH9vsGxNK9hnG8lyjIsTmEBUw92');
+            INSERT INTO ecommerce.USER_ROLE (user_id, role) VALUES ((SELECT ID FROM ecommerce.USER WHERE email='merchant@ecommerce.com'),'CUSTOMER');
         </sql>
 
     </changeSet>
